@@ -64,7 +64,7 @@ pc.defineParameter("tempFileSystemMax",  "Temp Filesystem Max Space",
                     "check this box to allocate all available disk space. Leave the size above as zero.")
 
 pc.defineParameter("tempFileSystemMount", "Temporary Filesystem Mount Point",
-      __             portal.ParameterType.STRING,"/mydata",advanced=True,
+                   portal.ParameterType.STRING,"/mydata",advanced=True,
                    longDescription="Mount the temporary file system at this mount point; in general you " +
                    "you do not need to change this, but we provide the option just in case your software " +
                    "is finicky.")  
