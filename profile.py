@@ -64,7 +64,7 @@ pc.defineParameter("tempFileSystemMax",  "Temp Filesystem Max Space",
                     "check this box to allocate all available disk space. Leave the size above as zero.")
 
 pc.defineParameter("tempFileSystemMount", "Temporary Filesystem Mount Point",
-                   portal.ParameterType.STRING,"/mydata",advanced=True,
+      __             portal.ParameterType.STRING,"/mydata",advanced=True,
                    longDescription="Mount the temporary file system at this mount point; in general you " +
                    "you do not need to change this, but we provide the option just in case your software " +
                    "is finicky.")  
@@ -115,9 +115,11 @@ for nodeName in nodeList:
     host_iface1 = host.addInterface()
     host_iface1.component_id = "eth2"
     host_iface1.addAddress(pg.IPv4Address("192.168.40." + str(i+30), "255.255.255.0")) 
-    host_iface2 = host.addInterface()
-    host_iface2.component_id = "eth3"
-    host_iface2.addAddress(pg.IPv4Address("192.168.40." + str(i+40), "255.255.255.0"))
+
+    if(host.type == "fpga-alveo-100g"):
+        host_iface2 = host.addInterface()
+        host_iface2.component_id = "eth3"
+        host_iface2.addAddress(pg.IPv4Address("192.168.40." + str(i+40), "255.255.255.0"))
 
     # FPGA Interface
     fpga_iface1 = fpga.addInterface()
@@ -129,7 +131,8 @@ for nodeName in nodeList:
  
 
     lan.addInterface(host_iface1)
-    lan.addInterface(host_iface2)
+    if(host.type == "fpga-alveo-100g"):
+        lan.addInterface(host_iface2)
     lan.addInterface(fpga_iface1)
     lan.addInterface(fpga_iface2)
   
