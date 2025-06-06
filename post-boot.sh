@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+install_libssl(){
+    if [[ "$OSVERSION" == "ubuntu-22.04" ]]; then
+        echo "Installing libssl.so.1.1"
+        wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+        sudo dpkg -i libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+    fi
+}
+
 install_xrt() {
     echo "Install XRT"
     if [[ "$OSVERSION" == "ubuntu-20.04" ]] || [[ "$OSVERSION" == "ubuntu-22.04" ]]; then
@@ -174,6 +182,7 @@ else
 fi
 
 install_libs
+install_libssl
 # Disable PCIe fatal error reporting
 disable_pcie_fatal_error 
 
