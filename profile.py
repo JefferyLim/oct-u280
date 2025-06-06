@@ -36,16 +36,16 @@ pc.defineParameter("nodes","List of nodes",
                    
 pc.defineParameter("workflow", "Workflow",
                    portal.ParameterType.STRING,
-                   workflow[0], workflow,
+                   workflow[1], workflow,
                    longDescription="For Vitis application acceleration workflow, select Vitis. For traditional workflow, select Vivado.")   
 
 pc.defineParameter("toolVersion", "Tool Version",
                    portal.ParameterType.STRING,
-                   toolVersion[0], toolVersion,
+                   toolVersion[1], toolVersion,
                    longDescription="Select a tool version. It is recommended to use the latest version for the deployment workflow. For more information, visit https://www.xilinx.com/products/boards-and-kits/alveo/u280.html#gettingStarted")   
 pc.defineParameter("osImage", "Select Image",
                    portal.ParameterType.IMAGE,
-                   imageList[0], imageList,
+                   imageList[1], imageList,
                    longDescription="Supported operating systems are Ubuntu and CentOS.")  
 
 # Optional ephemeral blockstore
@@ -98,6 +98,7 @@ for nodeName in nodeList:
         bs.placement = "any"
 
     host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.workflow + " " + params.toolVersion + " >> /local/logs/output_log.txt"))
+    host.addService(pg.Execute(shell="bash", command="/local/repository/user-setup.sh " + params.workflow + " " + params.toolVersion + " >> /local/logs/user_log.txt"))
 
     # Since we want to create network links to the FPGA, it has its own identity.
     fpga = request.RawPC("fpga-" + nodeName)
