@@ -230,7 +230,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 if [ $USER != $GENIUSER ]; then
-    sudo -u $GENIUSER $SCRIPTPATH/user-setup.sh
+    sudo -u $GENIUSER $SCRIPT_PATH/user-setup.sh
     exit $?
 fi
 
