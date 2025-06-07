@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "Running user script"
+
 install_custom_lib(){
     sudo apt-get install -y iperf
     git clone https://github.com/JefferyLim/corundum ~/corundum 

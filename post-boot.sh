@@ -220,8 +220,6 @@ else
     install_xbflash
 fi
 
-SCRIPTNAME="user-setup.sh"
-
 #
 # Might not be on the local cluster, so need to use the urn to
 # see who the actual creator is.
@@ -232,7 +230,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 if [ $USER != $GENIUSER ]; then
-    sudo -u $GENIUSER $SCRIPTNAME
+    sudo -u $GENIUSER $SCRIPTPATH/user-script.sh
     exit $?
 fi
 
