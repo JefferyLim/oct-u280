@@ -232,8 +232,5 @@ fi
 
 echo "$GENIUSER"
 
-if [ $USER != $GENIUSER ]; then
-    sudo -u $GENIUSER $SCRIPT_PATH/user-setup.sh
-    exit $?
-fi
+sudo -u $GENIUSER $SCRIPT_PATH/user-setup.sh
 
