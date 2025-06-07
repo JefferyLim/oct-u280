@@ -229,6 +229,9 @@ if [ $? -ne 0 ]; then
     echo "ERROR: could not run geni-get user_urn!"
     exit 1
 fi
+
+echo "$GENIUSER"
+
 if [ $USER != $GENIUSER ]; then
     sudo -u $GENIUSER $SCRIPT_PATH/user-setup.sh
     exit $?
