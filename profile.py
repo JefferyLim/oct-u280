@@ -98,7 +98,6 @@ for nodeName in nodeList:
         bs.placement = "any"
 
     host.addService(pg.Execute(shell="bash", command="sudo /local/repository/post-boot.sh " + params.workflow + " " + params.toolVersion + " >> /local/logs/output_log.txt"))
-    # host.addService(pg.Execute(shell="bash", command="/local/repository/user-setup.sh >> /local/logs/user_log.txt"))
 
     # Since we want to create network links to the FPGA, it has its own identity.
     fpga = request.RawPC("fpga-" + nodeName)
