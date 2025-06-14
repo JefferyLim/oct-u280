@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#
+# Might not be on the local cluster, so need to use the urn to
+# see who the actual creator is.
+#
+GENIUSER=`geni-get user_urn | awk -F+ '{print $4}'`
+if [ $? -ne 0 ]; then
+    echo "ERROR: could not run geni-get user_urn!"
+    exit 1
+fi
+
 install_libssl(){
     if [[ "$OSVERSION" == "ubuntu-22.04" ]]; then
         echo "Installing libssl.so.1.1"
@@ -10,8 +20,8 @@ install_libssl(){
 
 install_kvm(){
     sudo apt install -y qemu-kvm virt-manager libvirt-daemon-system virtinst libvirt-clients bridge-utils
-    sudo usermod -aG kvm jlim
-    sudo usermod -aG libvert jlim
+    sudo usermod -aG kvm $GENIUSER
+    sudo usermod -aG libvert $GENIUSER
 }
 
 install_xrt() {
@@ -226,17 +236,8 @@ else
     install_xbflash
 fi
 
-#
-# Might not be on the local cluster, so need to use the urn to
-# see who the actual creator is.
-#
-GENIUSER=`geni-get user_urn | awk -F+ '{print $4}'`
-if [ $? -ne 0 ]; then
-    echo "ERROR: could not run geni-get user_urn!"
-    exit 1
-fi
 
-echo "$GENIUSER"
+install_kvm
 
 sudo -u $GENIUSER $SCRIPT_PATH/user-setup.sh
 
