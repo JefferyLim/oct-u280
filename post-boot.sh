@@ -8,6 +8,12 @@ install_libssl(){
     fi
 }
 
+install_kvm(){
+    sudo apt install -y qemu-kvm virt-manager libvirt-daemon-system virtinst libvirt-clients bridge-utils
+    sudo usermod -aG kvm jlim
+    sudo usermod -aG libvert jlim
+}
+
 install_xrt() {
     echo "Install XRT"
     if [[ "$OSVERSION" == "ubuntu-20.04" ]] || [[ "$OSVERSION" == "ubuntu-22.04" ]]; then
