@@ -10,6 +10,27 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+enable_intel_iommu(){
+#!/bin/bash
+  GRUB_FILE="/etc/default/grub"
+  PARAM="intel_iommu=on"
+
+  # Check if the GRUB_CMDLINE_LINUX line already contains the parameter
+  if grep -q "^GRUB_CMDLINE_LINUX=.*$PARAM" "$GRUB_FILE"; then
+    echo "$PARAM already present in GRUB_CMDLINE_LINUX."
+  else
+    echo "Adding $PARAM to GRUB_CMDLINE_LINUX."
+
+    # Use sed to append the parameter inside the existing quotes
+    sed -i "/^GRUB_CMDLINE_LINUX=/ s/\"\(.*\)\"/\"\1 $PARAM\"/" "$GRUB_FILE"
+
+    sudo update-grub
+    sudo reboot now
+  fi
+}
+
+
+
 install_libssl(){
     if [[ "$OSVERSION" == "ubuntu-22.04" ]]; then
         echo "Installing libssl.so.1.1"
@@ -237,6 +258,8 @@ fi
 
 
 install_kvm
+
+enable_intel_iommu
 
 sudo -u $GENIUSER $SCRIPT_PATH/user-setup.sh
 
