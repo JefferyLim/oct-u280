@@ -11,7 +11,6 @@ if [ $? -ne 0 ]; then
 fi
 
 enable_intel_iommu(){
-#!/bin/bash
   GRUB_FILE="/etc/default/grub"
   PARAM="intel_iommu=on"
 
