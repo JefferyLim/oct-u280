@@ -44,6 +44,10 @@ install_kvm(){
     sudo usermod -aG libvert $GENIUSER
 }
 
+install_ovs(){
+    sudo apt install -y openvswitch-switch uml-utilities
+}
+
 install_xrt() {
     echo "Install XRT"
     if [[ "$OSVERSION" == "ubuntu-20.04" ]] || [[ "$OSVERSION" == "ubuntu-22.04" ]]; then
@@ -257,6 +261,7 @@ fi
 
 
 install_kvm
+install_ovs
 
 enable_intel_iommu
 
