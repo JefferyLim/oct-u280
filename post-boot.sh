@@ -12,7 +12,7 @@ fi
 
 enable_intel_iommu(){
   GRUB_FILE="/etc/default/grub"
-  PARAM="intel_iommu=on"
+  PARAM="intel_iommu=on iommu=pt intremap=on"
 
   # Check if the GRUB_CMDLINE_LINUX line already contains the parameter
   if grep -q "^GRUB_CMDLINE_LINUX=.*$PARAM" "$GRUB_FILE"; then
