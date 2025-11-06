@@ -10,6 +10,7 @@ install_custom_lib(){
     ./configure
     make
     sudo make install
+    sudo apt-get install -y iperf3 # not sure why this is necessary to get it working
     git clone https://github.com/JefferyLim/corundum /users/jlim/corundum 
     git clone https://github.com/JefferyLim/OS4C /users/jlim/OS4C
     git clone https://github.com/JefferyLim/oct_helper /users/jlim/oct_helper
