@@ -6,7 +6,13 @@ install_custom_lib(){
     sudo apt-get install -y iperf git
     git clone -b jlim/dev https://github.com/JefferyLim/corundum /users/jlim/corundum 
     git clone -b vswitch/dev https://github.com/JefferyLim/OS4C /users/jlim/OS4C
-    git clone https://github.com/JefferyLim/oct_helper /users/jlim/oct_helper
+    wget https://github.com/esnet/iperf/releases/download/3.16/iperf-3.16.tar.gz
+    tar -xvf iperf-3.16.tar.gz
+    cd iperf-3.16/
+    ./configure
+    make
+    sudo make install
+    sudo apt-get install -y iperf3 # not sure why this is necessary to get it working
 }
 
 install_custom_lib
