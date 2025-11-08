@@ -45,7 +45,8 @@ install_kvm(){
 }
 
 install_ovs(){
-    sudo apt install -y openvswitch-switch uml-utilities
+    sudo apt install -y openvswitch-switch uml-utilities openvswitch-switch-dpdk
+    sudo update-alternatives --set ovs-vswitchd /usr/lib/openvswitch-switch-dpdk/ovs-vswitchd-dpdk
 }
 
 install_xrt() {
