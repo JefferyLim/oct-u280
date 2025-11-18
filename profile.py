@@ -17,12 +17,11 @@ pc = portal.Context()
 request = pc.makeRequestRSpec()
 
 # Pick your image.
-imageList = [('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD', 'UBUNTU 22.04'),
-             ('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU20-64-STD', 'UBUNTU 20.04')] 
+imageList = [('urn:publicid:IDN+emulab.net+image+emulab-ops//UBUNTU22-64-STD', 'UBUNTU 22.04')]
 
 workflow = ['Vitis', 'Vivado']
 
-toolVersion = ['2023.2', '2023.1'] 
+toolVersion = ['2023.1'] 
 
 pc.defineParameter("nodes","List of nodes",
                    portal.ParameterType.STRING,"",
@@ -35,12 +34,12 @@ pc.defineParameter("workflow", "Workflow",
 
 pc.defineParameter("toolVersion", "Tool Version",
                    portal.ParameterType.STRING,
-                   toolVersion[1], toolVersion,
+                   toolVersion[0], toolVersion,
                    longDescription="Select a tool version. It is recommended to use the latest version for the deployment workflow. For more information, visit https://www.xilinx.com/products/boards-and-kits/alveo/u280.html#gettingStarted")   
 
 pc.defineParameter("osImage", "Select Image",
                    portal.ParameterType.IMAGE,
-                   imageList[1], imageList,
+                   imageList[0], imageList,
                    longDescription="Supported operating systems are Ubuntu and CentOS.")  
 
 pc.defineParameter("remoteDesktop", "Remote Desktop Access",
