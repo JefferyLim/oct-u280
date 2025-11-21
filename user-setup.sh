@@ -5,7 +5,7 @@ echo "Running user script"
 install_custom_lib(){
     sudo apt-get remove iperf3 
     sudo apt-get autoremove 
-    sudo apt-get install -y git
+    sudo apt-get install -y git lib32z1
     git clone -b jlim/dev https://github.com/JefferyLim/corundum /users/jlim/corundum 
     git clone -b vswitch/dev https://github.com/JefferyLim/OS4C /users/jlim/OS4C
     git clone https://github.com/JefferyLim/oct_helper.git
