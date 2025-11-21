@@ -9,9 +9,9 @@ install_custom_lib(){
     git clone -b jlim/dev https://github.com/JefferyLim/corundum /users/jlim/corundum 
     git clone -b vswitch/dev https://github.com/JefferyLim/OS4C /users/jlim/OS4C
     git clone https://github.com/JefferyLim/oct_helper.git
-    wget https://github.com/esnet/iperf/releases/download/3.16/iperf-3.16.tar.gz
-    tar -xvf iperf-3.16.tar.gz
-    cd iperf-3.16/
+    wget https://github.com/esnet/iperf/releases/download/3.20/iperf-3.20.tar.gz
+    tar -xvf iperf-3.20.tar.gz
+    cd iperf-3.20/
     ./configure
     make
     sudo make install
