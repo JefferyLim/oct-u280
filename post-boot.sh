@@ -268,9 +268,9 @@ fi
 install_kvm
 install_ovs
 
-enable_intel_iommu
-
 sudo -u $GENIUSER $SCRIPT_PATH/user-setup.sh
+
+enable_intel_iommu
 
 if [ $REMOTEDESKTOP == "True" ] ; then
     echo "Installing remote desktop software"

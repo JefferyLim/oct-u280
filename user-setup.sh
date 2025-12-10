@@ -18,6 +18,8 @@ install_custom_lib(){
     hash iperf3
 }
 
+cd /users/jlim/
+
 install_custom_lib
 
 cd /users/jlim/corundum/modules/mqnic
