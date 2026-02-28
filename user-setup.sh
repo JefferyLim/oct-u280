@@ -20,6 +20,9 @@ install_custom_lib(){
 
 cd /users/jlim/
 
+mkdir -p /users/jlim/vm-results
+
+
 install_custom_lib
 
 cd /users/jlim/corundum/modules/mqnic
