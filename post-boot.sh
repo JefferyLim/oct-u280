@@ -11,9 +11,8 @@ if [ $? -ne 0 ]; then
 fi
 
 enable_intel_iommu(){
-#!/bin/bash
   GRUB_FILE="/etc/default/grub"
-  PARAM="intel_iommu=on"
+  PARAM="intel_iommu=on iommu=pt intremap=on"
 
   # Check if the GRUB_CMDLINE_LINUX line already contains the parameter
   if grep -q "^GRUB_CMDLINE_LINUX=.*$PARAM" "$GRUB_FILE"; then
@@ -45,6 +44,11 @@ install_kvm(){
     sudo usermod -aG libvert $GENIUSER
 }
 
+install_ovs(){
+    sudo apt install -y openvswitch-switch uml-utilities openvswitch-switch-dpdk
+    sudo update-alternatives --set ovs-vswitchd /usr/lib/openvswitch-switch-dpdk/ovs-vswitchd-dpdk
+}
+
 install_xrt() {
     echo "Install XRT"
     if [[ "$OSVERSION" == "ubuntu-20.04" ]] || [[ "$OSVERSION" == "ubuntu-22.04" ]]; then
@@ -55,7 +59,13 @@ install_xrt() {
         apt install -y $XRT_BASE_PATH/$TOOLVERSION/$OSVERSION/$XRT_PACKAGE
     fi
     sudo bash -c "echo 'source /opt/xilinx/xrt/setup.sh' >> /etc/profile"
-    sudo bash -c "echo 'source $VITIS_BASE_PATH/$VITISVERSION/settings64.sh' >> /etc/profile"
+    sudo bash -c "echo 'source $VITIS_BASE_PATH/$TOOLVERSION/settings64.sh' >> /etc/profile"
+}
+
+install_u280_dev_platform(){
+    echo "Install u280 dev platform"
+    cp $U280_DEV_PLATFORM_PATH/$TOOLVERSION/*.deb /tmp
+    apt install /tmp/xilinx-u280*.deb
 }
 
 install_shellpkg() {
@@ -119,7 +129,6 @@ install_u280_shell() {
         if [[ $SHELL_PACKAGE == *.tar.gz ]]; then
             echo "Untar the package. "
             tar xzvf $SHELL_BASE_PATH/$TOOLVERSION/$OSVERSION/$SHELL_PACKAGE -C /tmp/
-            rm /tmp/$SHELL_PACKAGE
         fi
         echo "Install Shell"
         if [[ "$OSVERSION" == "ubuntu-20.04" ]] || [[ "$OSVERSION" == "ubuntu-22.04" ]]; then
@@ -162,24 +171,25 @@ detect_cards() {
 
 install_config_fpga() {
     echo "Installing config-fpga."
-    cp $CONFIG_FPGA_PATH/* /usr/local/bin
+    cp $CONFIG_FPGA_PATH/$OSVERSION/* /usr/local/bin
 }
 
 install_libs() {
     echo "Installing libs."
-    sudo $VITIS_BASE_PATH/$VITISVERSION/scripts/installLibs.sh
+    sudo $VITIS_BASE_PATH/$TOOLVERSION/scripts/installLibs.sh
 }
 
 disable_pcie_fatal_error() {
     echo "Disabling PCIe fatal error reporting for node: $NODE_ID"
-    sudo /proj/octfpga-PG0/tools/pcie_disable_fatal.sh $PCI_ADDR
+    sudo /share/tools/u280/pcie_disable_fatal.sh $PCI_ADDR
 }
 
-XRT_BASE_PATH="/proj/octfpga-PG0/tools/deployment/xrt"
-SHELL_BASE_PATH="/proj/octfpga-PG0/tools/deployment/shell"
-XBFLASH_BASE_PATH="/proj/octfpga-PG0/tools/xbflash"
-VITIS_BASE_PATH="/proj/octfpga-PG0/tools/Xilinx/Vitis"
-CONFIG_FPGA_PATH="/proj/octfpga-PG0/tools/post-boot"
+XRT_BASE_PATH="/share/tools/u280/deployment/xrt"
+SHELL_BASE_PATH="/share/tools/u280/deployment/shell"
+XBFLASH_BASE_PATH="/share/tools/u280/xbflash"
+VITIS_BASE_PATH="/share/Xilinx/Vitis"
+U280_DEV_PLATFORM_PATH="/share/tools/u280/dev_platform"
+CONFIG_FPGA_PATH="/share/tools/u280/post-boot"
 
 OSVERSION=`grep '^ID=' /etc/os-release | awk -F= '{print $2}'`
 OSVERSION=`echo $OSVERSION | tr -d '"'`
@@ -188,7 +198,7 @@ VERSION_ID=`echo $VERSION_ID | tr -d '"'`
 OSVERSION="$OSVERSION-$VERSION_ID"
 WORKFLOW=$1
 TOOLVERSION=$2
-VITISVERSION="2023.1"
+REMOTEDESKTOP=$3
 SCRIPT_PATH=/local/repository
 COMB="${TOOLVERSION}_${OSVERSION}"
 XRT_PACKAGE=`grep ^$COMB: $SCRIPT_PATH/spec.txt | awk -F':' '{print $2}' | awk -F';' '{print $1}' | awk -F= '{print $2}'`
@@ -222,8 +232,8 @@ install_libs
 install_libssl
 # Disable PCIe fatal error reporting
 disable_pcie_fatal_error 
-
 install_config_fpga
+install_u280_dev_platform
 
 if [ "$WORKFLOW" = "Vitis" ] ; then
     check_shellpkg
@@ -258,8 +268,19 @@ fi
 
 
 install_kvm
+install_ovs
 
 enable_intel_iommu
 
 sudo -u $GENIUSER $SCRIPT_PATH/user-setup.sh
 
+enable_intel_iommu
+
+if [ $REMOTEDESKTOP == "True" ] ; then
+    echo "Installing remote desktop software"
+    apt install -y ubuntu-gnome-desktop
+    echo "Installed gnome desktop"
+    systemctl set-default multi-user.target
+    apt install -y tigervnc-standalone-server
+    echo "Installed vnc server"
+fi
