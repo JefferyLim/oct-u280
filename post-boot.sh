@@ -28,6 +28,8 @@ enable_intel_iommu(){
   fi
 }
 
+
+
 install_libssl(){
     if [[ "$OSVERSION" == "ubuntu-22.04" ]]; then
         echo "Installing libssl.so.1.1"
@@ -267,6 +269,8 @@ fi
 
 install_kvm
 install_ovs
+
+enable_intel_iommu
 
 sudo -u $GENIUSER $SCRIPT_PATH/user-setup.sh
 
