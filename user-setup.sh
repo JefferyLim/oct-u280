@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "Running user script"
+echo "Running user script as $USER in $HOME"
 
 SENTINEL="/users/$USER/.user_script_done"
 if [ -f "$SENTINEL" ]; then
