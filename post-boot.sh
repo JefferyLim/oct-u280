@@ -11,6 +11,7 @@ if [ $? -ne 0 ]; then
 fi
 
 enable_intel_iommu(){
+  echo "Enabling IOMMU"
   GRUB_FILE="/etc/default/grub"
   PARAM="intel_iommu=on iommu=pt intremap=on"
 
@@ -52,12 +53,14 @@ install_libssl() {
 }
 
 install_kvm(){
+    echo "Installing kvm"
     sudo apt install -y qemu-kvm virt-manager libvirt-daemon-system virtinst libvirt-clients bridge-utils
     sudo usermod -aG kvm $GENIUSER
     sudo usermod -aG libvert $GENIUSER
 }
 
 install_ovs(){
+    echo "Installing OVS-dpdk"
     sudo apt install -y openvswitch-switch uml-utilities openvswitch-switch-dpdk
     sudo update-alternatives --set ovs-vswitchd /usr/lib/openvswitch-switch-dpdk/ovs-vswitchd-dpdk
 }
@@ -284,11 +287,9 @@ else
     install_xbflash
 fi 
 
-
+install_libssl
 install_kvm
 install_ovs
-
-enable_intel_iommu
 
 sudo -u $GENIUSER $SCRIPT_PATH/user-setup.sh
 

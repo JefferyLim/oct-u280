@@ -31,7 +31,7 @@ make
 cd ../../utils/
 make
 # File to modify
-BASHRC="$HOME/.bashrc"
+BASHRC="/users/jlim/.bashrc"
 # Lines to add
 cat << 'EOF' >> "$BASHRC"
 alias thesisdriver="cd ~/OS4C/modules/mqnic"
