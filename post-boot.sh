@@ -28,12 +28,27 @@ enable_intel_iommu(){
   fi
 }
 
-install_libssl(){
-    if [[ "$OSVERSION" == "ubuntu-22.04" ]]; then
-        echo "Installing libssl.so.1.1"
-        wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
-        sudo dpkg -i libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+install_libssl() {
+    if [[ "$OSVERSION" != "ubuntu-22.04" ]]; then
+        return 0
     fi
+
+    # Check if libssl.so.1.1 is already available on the system
+    if ldconfig -p | grep -q 'libssl\.so\.1\.1'; then
+        echo "libssl.so.1.1 already installed — skipping"
+        return 0
+    fi
+
+    # Alternative check: package presence (catches cases where lib is installed
+    # but ldconfig cache is stale)
+    if dpkg -s libssl1.1 >/dev/null 2>&1; then
+        echo "libssl1.1 package already installed — skipping"
+        return 0
+    fi
+
+    echo "Installing libssl.so.1.1"
+    wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+    sudo dpkg -i libssl1.1_1.1.0g-2ubuntu4_amd64.deb
 }
 
 install_kvm(){
@@ -122,6 +137,7 @@ check_requested_shell() {
 check_factory_shell() {
     SHELL_INSTALL_INFO=`/opt/xilinx/xrt/bin/xbmgmt examine | grep "$FACTORY_SHELL"`
 }
+
 install_u280_shell() {
     check_shellpkg
     if [[ $? != 0 ]]; then
